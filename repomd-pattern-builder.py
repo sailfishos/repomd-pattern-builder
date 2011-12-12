@@ -32,6 +32,7 @@ NSMAP = {None : pattern_ns, "rpm": rpm_ns}
 NSMAP_GROUP = {None : pattern_ns, "rpm": rpm_ns, "patterns": pattern_ns}
 
 TMP_FILE = "xmllint_tmp.xml"
+XMLLINT = "/usr/bin/xmllint"
 
 def process_yaml(stream, proot, newobsapi):
 	y = yaml.load(stream)
@@ -110,8 +111,8 @@ def merge_patterns(patterns_dir,outputdir,newobsapi):
 	xmlroot.set('count', "%d" %count)
 	tree = etree.ElementTree(xmlroot)
 	# Indent the XML with xmllint and output to file.
-	tree.write("%s" % (TMP_FILE))	
-	os.system("xmllint --format %s --output %s" % (TMP_FILE, output_file))
+	tree.write("%s" % (TMP_FILE))
+	os.system("%s --format %s --output %s" % (XMLLINT,TMP_FILE, output_file))
 
 if __name__ == '__main__':
 	parser = optparse.OptionParser()
@@ -141,7 +142,11 @@ if __name__ == '__main__':
 	if (not options.patterndir or not os.path.exists(options.patterndir)):
 		print "Error: Pattern dir '%s' doesn't exist." % (options.patterndir)
 		exit(1)
-
+	
+	if not os.path.exists(XMLLINT):
+		print "Error: '%s' is required when executing this script."
+		exit(1)
+	
 	if options.outputdir and not os.path.exists(options.outputdir):
 		os.makedirs(options.outputdir)
 	
