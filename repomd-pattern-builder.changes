@@ -1,2 +1,5 @@
+* Tue Jul 31 2012 Marko Saukko <marko.saukko@jollamobile.com> - 0.2.1
+- Add epoch and rel to version element to fix compatibility with OBS.
+
 * Mon Jan 02 2012 Marko Saukko <marko.saukko@cybercom.com> - 0.2
 - Initial packaging for the repomd-pattern-builder.
