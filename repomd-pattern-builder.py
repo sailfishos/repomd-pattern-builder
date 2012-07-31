@@ -44,7 +44,21 @@ def process_yaml(stream, proot, newobsapi):
 	if newobsapi:
 		# <version>
 		if y.has_key('Version'):
-			etree.SubElement(proot, "version").attrib['ver'] = "%s" % y['Version']
+			version = etree.SubElement(proot, "version")
+			version.attrib['ver'] = "%s" % y['Version']
+			
+			# Set to 0 by default as that is what OBS expects.
+			epoch = "0" 
+			if y.has_key('Epoch'):
+				epoch = y['Epoch']
+
+			# As above...
+			release = "0"
+			if y.has_key('Release'):
+				release =  y['Release']
+
+			version.attrib['epoch'] = "%s" % epoch
+			version.attrib['rel'] = "%s" % release
 		
 		# <arch>
 		if y.has_key('Arch'):
