@@ -31,9 +31,6 @@ NSMAP = {None : pattern_ns, "rpm": rpm_ns}
 
 NSMAP_GROUP = {None : pattern_ns, "rpm": rpm_ns, "patterns": pattern_ns}
 
-TMP_FILE = "xmllint_tmp.xml"
-XMLLINT = "/usr/bin/xmllint"
-
 def process_yaml(stream, proot, newobsapi):
 	"Process all documents in the yaml stream and return a count of number handled"
 	all_docs = yaml.load_all(stream)
@@ -107,10 +104,8 @@ def create_patterns(patterns_dir, outputdir,newobsapi):
 		proot = etree.Element("pattern",  nsmap=NSMAP)
 		process_yaml(stream,proot,newobsapi)
 
-		# Indent the XML with xmllint and output to file.
-		tree = etree.ElementTree(proot)
-		tree.write("%s" % (TMP_FILE))
-		os.system("xmllint --format %s --output %s" % (TMP_FILE, output_file))
+		# Indent the XML as we output to file.
+		etree.ElementTree(proot).write(output_file, pretty_print=True)
 
 def merge_patterns(patterns_dir,outputdir,newobsapi):
 	xmlroot = etree.Element("patterns")
@@ -125,10 +120,8 @@ def merge_patterns(patterns_dir,outputdir,newobsapi):
 		count = count + process_yaml(stream,proot,newobsapi)
 
 	xmlroot.set('count', "%d" %count)
-	tree = etree.ElementTree(xmlroot)
-	# Indent the XML with xmllint and output to file.
-	tree.write("%s" % (TMP_FILE))
-	os.system("%s --format %s --output %s" % (XMLLINT,TMP_FILE, output_file))
+	# Indent the XML as we output to file.
+	etree.ElementTree(xmlroot).write(output_file, pretty_print=True)
 
 if __name__ == '__main__':
 	parser = optparse.OptionParser()
@@ -157,10 +150,6 @@ if __name__ == '__main__':
 	
 	if (not options.patterndir or not os.path.exists(options.patterndir)):
 		print "Error: Pattern dir '%s' doesn't exist." % (options.patterndir)
-		exit(1)
-	
-	if not os.path.exists(XMLLINT):
-		print "Error: '%s' is required when executing this script."
 		exit(1)
 	
 	if options.outputdir and not os.path.exists(options.outputdir):
