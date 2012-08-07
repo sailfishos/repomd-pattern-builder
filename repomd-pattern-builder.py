@@ -35,61 +35,64 @@ TMP_FILE = "xmllint_tmp.xml"
 XMLLINT = "/usr/bin/xmllint"
 
 def process_yaml(stream, proot, newobsapi):
-	y = yaml.load(stream)
+	"Process all documents in the yaml stream and return a count of number handled"
+	all_docs = yaml.load_all(stream)
+	count = 0
+	for y in all_docs:
+		count = count + 1
+		# <name>
+		etree.SubElement(proot, "name").text = y['Name']
 
-	# <name>
-	etree.SubElement(proot, "name").text = y['Name']
-	
-	# Old OBS isn't able to handle these options.
-	if newobsapi:
-		# <version>
-		if y.has_key('Version'):
-			version = etree.SubElement(proot, "version")
-			version.attrib['ver'] = "%s" % y['Version']
-			
-			# Set to 0 by default as that is what OBS expects.
-			epoch = "0" 
-			if y.has_key('Epoch'):
-				epoch = y['Epoch']
+		# Old OBS isn't able to handle these options.
+		if newobsapi:
+			# <version>
+			if y.has_key('Version'):
+				version = etree.SubElement(proot, "version")
+				version.attrib['ver'] = "%s" % y['Version']
 
-			# As above...
-			release = "0"
-			if y.has_key('Release'):
-				release =  y['Release']
+				# Set to 0 by default as that is what OBS expects.
+				epoch = "0" 
+				if y.has_key('Epoch'):
+					epoch = y['Epoch']
 
-			version.attrib['epoch'] = "%s" % epoch
-			version.attrib['rel'] = "%s" % release
-		
-		# <arch>
-		if y.has_key('Arch'):
-			etree.SubElement(proot, "arch").text = "%s" % y['Arch']
-	
-	# <summary>
-	etree.SubElement(proot, "summary").text = y['Summary']
-	# <description>
-	etree.SubElement(proot, "description").text = y['Description']
-	# <uservisible>
-	etree.SubElement(proot, "uservisible")
-	# <category>
-	cat = etree.SubElement(proot, "category")
-	cat.text = "Base Group"
-	cat.set("lang", "en")
-	# <rpm:requires>
-	req = etree.SubElement(proot, "{%s}requires" %rpm_ns)
-	packages = y['Packages']
+				# As above...
+				release = "0"
+				if y.has_key('Release'):
+					release =  y['Release']
 
-	for p in packages:
-		if type(p).__name__=='dict':
-			a = p.values()[0]
-			if a == arch:
+				version.attrib['epoch'] = "%s" % epoch
+				version.attrib['rel'] = "%s" % release
+
+			# <arch>
+			if y.has_key('Arch'):
+				etree.SubElement(proot, "arch").text = "%s" % y['Arch']
+
+		# <summary>
+		etree.SubElement(proot, "summary").text = y['Summary']
+		# <description>
+		etree.SubElement(proot, "description").text = y['Description']
+		# <uservisible>
+		etree.SubElement(proot, "uservisible")
+		# <category>
+		cat = etree.SubElement(proot, "category")
+		cat.text = "Base Group"
+		cat.set("lang", "en")
+		# <rpm:requires>
+		req = etree.SubElement(proot, "{%s}requires" %rpm_ns)
+		packages = y['Packages']
+
+		for p in packages:
+			if type(p).__name__=='dict':
+				a = p.values()[0]
+				if a == arch:
+					entry = etree.SubElement(req, "{%s}entry" %rpm_ns)
+					entry.set("name", p.keys()[0])
+					entry.set("arch", arch)
+			else:
 				entry = etree.SubElement(req, "{%s}entry" %rpm_ns)
-				entry.set("name", p.keys()[0])
-				entry.set("arch", arch)
-		else:
-			entry = etree.SubElement(req, "{%s}entry" %rpm_ns)
-			entry.set("name", p)
-	
-	return proot
+				entry.set("name", p)
+
+	return count
 
 def create_patterns(patterns_dir, outputdir,newobsapi):
 	for f in os.listdir(patterns_dir):
@@ -102,7 +105,7 @@ def create_patterns(patterns_dir, outputdir,newobsapi):
 		
 		stream = file("%s/%s" %(patterns_dir,f), 'r')
 		proot = etree.Element("pattern",  nsmap=NSMAP)
-		proot = process_yaml(stream,proot,newobsapi)
+		process_yaml(stream,proot,newobsapi)
 
 		# Indent the XML with xmllint and output to file.
 		tree = etree.ElementTree(proot)
@@ -117,10 +120,9 @@ def merge_patterns(patterns_dir,outputdir,newobsapi):
 		if not f.endswith('.yaml'):
 			continue
 		print "Merging %s to %s." % (f,output_file)
-		count = count + 1
 		stream = file("%s/%s" %(patterns_dir,f), 'r')
 		proot = etree.SubElement(xmlroot, "pattern",  nsmap=NSMAP_GROUP)
-		proot = process_yaml(stream,proot,newobsapi)
+		count = count + process_yaml(stream,proot,newobsapi)
 
 	xmlroot.set('count', "%d" %count)
 	tree = etree.ElementTree(xmlroot)
