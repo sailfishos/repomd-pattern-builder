@@ -31,7 +31,7 @@ NSMAP = {None : pattern_ns, "rpm": rpm_ns}
 
 NSMAP_GROUP = {None : pattern_ns, "rpm": rpm_ns, "patterns": pattern_ns}
 
-def process_yaml(stream, proot, newobsapi):
+def process_yaml(stream, version, release, proot, newobsapi):
 	"Process all documents in the yaml stream and return a count of number handled"
 	all_docs = yaml.load_all(stream)
 	count = 0
@@ -43,22 +43,29 @@ def process_yaml(stream, proot, newobsapi):
 		# Old OBS isn't able to handle these options.
 		if newobsapi:
 			# <version>
-			if y.has_key('Version'):
-				version = etree.SubElement(proot, "version")
-				version.attrib['ver'] = "%s" % y['Version']
+			if y.has_key('Version') or version:
+				entry = etree.SubElement(proot, "version")
+				ver = "0"
+				if version:
+					ver = version
+				else:
+					ver = y['Version']
 
 				# Set to 0 by default as that is what OBS expects.
-				epoch = "0" 
+				epoch = "0"
 				if y.has_key('Epoch'):
 					epoch = y['Epoch']
 
 				# As above...
-				release = "0"
+				rel = "0"
+				if release:
+					rel = release
 				if y.has_key('Release'):
-					release =  y['Release']
+					rel =  y['Release']
 
-				version.attrib['epoch'] = "%s" % epoch
-				version.attrib['rel'] = "%s" % release
+				entry.set('ver', "%s" % ver)
+				entry.set('epoch', "%s" % epoch)
+				entry.set('rel', "%s" % rel)
 
 			# <arch>
 			if y.has_key('Arch'):
@@ -93,7 +100,7 @@ def process_yaml(stream, proot, newobsapi):
 
 	return count
 
-def create_patterns(patterns_dir, outputdir,newobsapi):
+def create_patterns(patterns_dir, version, release, outputdir, newobsapi):
 	for f in os.listdir(patterns_dir):
 		if not f.endswith('.yaml'):
 			continue
@@ -104,12 +111,12 @@ def create_patterns(patterns_dir, outputdir,newobsapi):
 		
 		stream = file("%s/%s" %(patterns_dir,f), 'r')
 		proot = etree.Element("pattern",  nsmap=NSMAP)
-		process_yaml(stream,proot,newobsapi)
+		process_yaml(stream, version, release, proot, newobsapi)
 
 		# Indent the XML as we output to file.
 		etree.ElementTree(proot).write(output_file, pretty_print=True)
 
-def merge_patterns(patterns_dir,outputdir,newobsapi):
+def merge_patterns(patterns_dir, version, release, outputdir, newobsapi):
 	xmlroot = etree.Element("patterns")
 	output_file = "%s/group.xml" % (outputdir)
 	count = 0
@@ -119,7 +126,7 @@ def merge_patterns(patterns_dir,outputdir,newobsapi):
 		print "Merging %s to %s." % (f,output_file)
 		stream = file("%s/%s" %(patterns_dir,f), 'r')
 		proot = etree.SubElement(xmlroot, "pattern",  nsmap=NSMAP_GROUP)
-		count = count + process_yaml(stream,proot,newobsapi)
+		count = count + process_yaml(stream, version, release, proot, newobsapi)
 
 	xmlroot.set('count', "%d" %count)
 	# Indent the XML as we output to file.
@@ -143,6 +150,8 @@ if __name__ == '__main__':
 	parser.add_option("", "--old-obs-xml-format", action="store_false", dest="newobsapi",
 			default=True,
 			help="The old OBS api isn't able to handle the newer xml format.")
+	parser.add_option("--version", type="string", dest="version", default=None, help="Version number")
+	parser.add_option("--release", type="string", dest="release", default=None, help="Release number")
 	
 	(options, args) = parser.parse_args()
 	
@@ -158,7 +167,7 @@ if __name__ == '__main__':
 		os.makedirs(options.outputdir)
 	
 	if options.patternxml:
-		create_patterns(options.patterndir,options.outputdir, options.newobsapi)
+		create_patterns(options.patterndir, options.version, options.release, options.outputdir, options.newobsapi)
 
 	if options.groupxml:
-		merge_patterns(options.patterndir,options.outputdir, options.newobsapi)
+		merge_patterns(options.patterndir, options.version, options.release, options.outputdir, options.newobsapi)
