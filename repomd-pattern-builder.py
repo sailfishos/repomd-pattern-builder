@@ -76,18 +76,20 @@ def process_yaml(stream, proot, newobsapi):
 		cat.set("lang", "en")
 		# <rpm:requires>
 		req = etree.SubElement(proot, "{%s}requires" %rpm_ns)
-		packages = y['Packages']
 
-		for p in packages:
-			if type(p).__name__=='dict':
-				a = p.values()[0]
-				if a == arch:
+                if y.has_key('Packages'):
+			packages = y['Packages']
+
+			for p in packages:
+				if type(p).__name__=='dict':
+					a = p.values()[0]
+					if a == arch:
+						entry = etree.SubElement(req, "{%s}entry" %rpm_ns)
+						entry.set("name", p.keys()[0])
+						entry.set("arch", arch)
+				else:
 					entry = etree.SubElement(req, "{%s}entry" %rpm_ns)
-					entry.set("name", p.keys()[0])
-					entry.set("arch", arch)
-			else:
-				entry = etree.SubElement(req, "{%s}entry" %rpm_ns)
-				entry.set("name", p)
+					entry.set("name", p)
 
 	return count
 
