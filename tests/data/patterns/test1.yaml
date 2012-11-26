@@ -1,0 +1,18 @@
+Description: Test decription
+Name: test1
+Version: 1
+Release: 2
+Conflicts:
+- conflicts-test1
+Requires:
+- requires-test1
+- requires-test2
+- requires-test3
+Recommends:
+- recommends-test1
+Provides:
+- provides-test1
+- provides-test2
+Suggests:
+- suggests-test1
+Summary: Test1

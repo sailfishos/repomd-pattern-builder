@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testdefinition version="1.0">
+<suite name="repomd-pattern-builder-suite">
+  <set name="generic-tests">
+  <description> Tests to test repomd-pattern-builder</description>
+  <case name="pattern-test1">
+    <description>Test default pattern features</description>
+    <step>/usr/bin/repomd-pattern-builder.py --patternxml --output /tmp/pattern-test1/ -p /opt/tests/repomd-pattern-builder/data/patterns/</step>
+    <step>diff -ruN /tmp/pattern-test1/ /opt/tests/repomd-pattern-builder/data/output-valid/</step>
+  </case>
+  </set>
+</suite>
+</testdefinition>
