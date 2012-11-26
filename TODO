@@ -1,0 +1,7 @@
+== Fix --patternxml with multiple patterns in single file ==
+
+Decide what to do when there are multiple patterns in single .yaml file and
+when user is creating patternxml instead of groupxml. Currently output of 
+test5 with --patternxml is broken see tests/data/patterns/test5.yaml as it 
+looses the second pattern.
+
