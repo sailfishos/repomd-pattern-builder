@@ -97,14 +97,10 @@ def process_yaml(stream, version, release, proot, newobsapi):
 
 			for p in collect:
 				if type(p).__name__=='dict':
-					a = p.values()[0]
-					if a == arch:
-						entry = etree.SubElement(req, "{%s}entry" %rpm_ns)
-						entry.set("name", p.keys()[0])
-						entry.set("arch", arch)
-				else:
-					entry = etree.SubElement(req, "{%s}entry" %rpm_ns)
-					entry.set("name", p)
+					print "ERROR: Found dict and expected string value. '%s'" % (p)
+					sys.exit(1)
+				entry = etree.SubElement(req, "{%s}entry" %rpm_ns)
+				entry.set("name", p)
 
 	return count
 
