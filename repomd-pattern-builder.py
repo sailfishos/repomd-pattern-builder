@@ -160,8 +160,8 @@ if __name__ == '__main__':
 	(options, args) = parser.parse_args()
 	
 	if (not options.groupxml and not options.patternxml):
-		print "Error: you need to use either --patternxml or --groupxml."
-		exit(1)
+		# Default to patternxml.
+		options.patternxml = True
 	
 	if (not options.patterndir or not os.path.exists(options.patterndir)):
 		print "Error: Pattern dir '%s' doesn't exist." % (options.patterndir)
