@@ -1,0 +1,13 @@
+<pattern xmlns:rpm="http://linux.duke.edu/metadata/rpm" xmlns="http://novell.com/package/metadata/suse/pattern">
+  <name>test4</name>
+  <version ver="1" epoch="3" rel="2"/>
+  <arch>i686</arch>
+  <summary>Test4</summary>
+  <description>Test decription</description>
+  <uservisible/>
+  <category lang="en">Base Group</category>
+  <rpm:requires>
+    <rpm:entry name="foo:bar"/>
+    <rpm:entry name="bar foo"/>
+  </rpm:requires>
+</pattern>
