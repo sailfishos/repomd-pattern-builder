@@ -1,0 +1,26 @@
+<pattern xmlns:rpm="http://linux.duke.edu/metadata/rpm" xmlns="http://novell.com/package/metadata/suse/pattern">
+  <name>test5</name>
+  <version ver="1" epoch="0" rel="2"/>
+  <summary>Test5</summary>
+  <description>Test decription</description>
+  <uservisible/>
+  <category lang="en">Base Group</category>
+  <rpm:conflicts>
+    <rpm:entry name="conflicts-test1"/>
+  </rpm:conflicts>
+  <rpm:requires>
+    <rpm:entry name="requires-test1"/>
+    <rpm:entry name="requires-test2"/>
+    <rpm:entry name="requires-test3"/>
+  </rpm:requires>
+  <rpm:recommends>
+    <rpm:entry name="recommends-test1"/>
+  </rpm:recommends>
+  <rpm:suggests>
+    <rpm:entry name="suggests-test1"/>
+  </rpm:suggests>
+  <rpm:provides>
+    <rpm:entry name="provides-test1"/>
+    <rpm:entry name="provides-test2"/>
+  </rpm:provides>
+</pattern>
