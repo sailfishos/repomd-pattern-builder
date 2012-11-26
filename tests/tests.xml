@@ -5,8 +5,10 @@
   <description> Tests to test repomd-pattern-builder</description>
   <case name="pattern-test1">
     <description>Test default pattern features</description>
-    <step>/usr/bin/repomd-pattern-builder.py --output /tmp/pattern-test1/ -p /opt/tests/repomd-pattern-builder/data/patterns/</step>
-    <step>diff -ruN /tmp/pattern-test1/ /opt/tests/repomd-pattern-builder/data/output-valid/</step>
+    <step>/usr/bin/repomd-pattern-builder.py --output /tmp/patternxml-test/ -p /opt/tests/repomd-pattern-builder/data/patterns/</step>
+    <step>diff -ruN /tmp/patternxml-test/ /opt/tests/repomd-pattern-builder/data/output-valid/</step>
+    <step>/usr/bin/repomd-pattern-builder.py --groupxml --output /tmp/groupxml-test/ -p /opt/tests/repomd-pattern-builder/data/patterns/</step>
+    <step>diff -ruN /tmp/groupxml-test/ /opt/tests/repomd-pattern-builder/data/output-groupxml-valid/</step>
   </case>
   </set>
 </suite>

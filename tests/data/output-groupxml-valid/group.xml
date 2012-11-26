@@ -1,0 +1,49 @@
+<patterns count="3">
+  <pattern xmlns:rpm="http://linux.duke.edu/metadata/rpm" xmlns:patterns="http://novell.com/package/metadata/suse/pattern" xmlns="http://novell.com/package/metadata/suse/pattern">
+    <name>test1</name>
+    <version ver="1" epoch="0" rel="2"/>
+    <summary>Test1</summary>
+    <description>Test decription</description>
+    <uservisible/>
+    <category lang="en">Base Group</category>
+    <rpm:conflicts>
+      <rpm:entry name="conflicts-test1"/>
+    </rpm:conflicts>
+    <rpm:requires>
+      <rpm:entry name="requires-test1"/>
+      <rpm:entry name="requires-test2"/>
+      <rpm:entry name="requires-test3"/>
+    </rpm:requires>
+    <rpm:recommends>
+      <rpm:entry name="recommends-test1"/>
+    </rpm:recommends>
+    <rpm:suggests>
+      <rpm:entry name="suggests-test1"/>
+    </rpm:suggests>
+    <rpm:provides>
+      <rpm:entry name="provides-test1"/>
+      <rpm:entry name="provides-test2"/>
+    </rpm:provides>
+  </pattern>
+  <pattern xmlns:rpm="http://linux.duke.edu/metadata/rpm" xmlns:patterns="http://novell.com/package/metadata/suse/pattern" xmlns="http://novell.com/package/metadata/suse/pattern">
+    <name>test2</name>
+    <summary>Test2</summary>
+    <description>Test decription</description>
+    <uservisible/>
+    <category lang="en">Base Group</category>
+  </pattern>
+  <pattern xmlns:rpm="http://linux.duke.edu/metadata/rpm" xmlns:patterns="http://novell.com/package/metadata/suse/pattern" xmlns="http://novell.com/package/metadata/suse/pattern"/>
+  <pattern xmlns:rpm="http://linux.duke.edu/metadata/rpm" xmlns:patterns="http://novell.com/package/metadata/suse/pattern" xmlns="http://novell.com/package/metadata/suse/pattern">
+    <name>test4</name>
+    <version ver="1" epoch="3" rel="2"/>
+    <arch>i686</arch>
+    <summary>Test4</summary>
+    <description>Test decription</description>
+    <uservisible/>
+    <category lang="en">Base Group</category>
+    <rpm:requires>
+      <rpm:entry name="foo:bar"/>
+      <rpm:entry name="bar foo"/>
+    </rpm:requires>
+  </pattern>
+</patterns>
