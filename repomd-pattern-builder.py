@@ -81,13 +81,22 @@ def process_yaml(stream, version, release, proot, newobsapi):
 		cat = etree.SubElement(proot, "category")
 		cat.text = "Base Group"
 		cat.set("lang", "en")
-		# <rpm:requires>
-		req = etree.SubElement(proot, "{%s}requires" %rpm_ns)
 
-                if y.has_key('Packages'):
-			packages = y['Packages']
+		package_keys = ['Packages','Conflicts', 'Requires', 'Recommends', 'Suggests', 'Provides']
+		for key in package_keys:
+			if not y.has_key(key):
+				continue
 
-			for p in packages:
+			collect = y[key]
+			if key == "Packages":
+				# Support obsoleted keys, this should be removed in the future
+				key = "Requires"
+				print "WARNING: Oboleted key 'Packages' in .yaml please change to 'Requires'."
+			
+			print "Creating key %s" % (key)
+			req = etree.SubElement(proot, "{%s}%s" % (rpm_ns,key.lower()))
+
+			for p in collect:
 				if type(p).__name__=='dict':
 					a = p.values()[0]
 					if a == arch:
