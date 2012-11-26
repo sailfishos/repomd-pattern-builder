@@ -105,7 +105,9 @@ def process_yaml(stream, version, release, proot, newobsapi):
 	return count
 
 def create_patterns(patterns_dir, version, release, outputdir, newobsapi):
-	for f in os.listdir(patterns_dir):
+	dirlist = os.listdir(patterns_dir)
+	dirlist.sort()
+	for f in dirlist:
 		if not f.endswith('.yaml'):
 			continue
 		
@@ -124,7 +126,9 @@ def merge_patterns(patterns_dir, version, release, outputdir, newobsapi):
 	xmlroot = etree.Element("patterns")
 	output_file = "%s/group.xml" % (outputdir)
 	count = 0
-	for f in os.listdir(patterns_dir):
+	dirlist = os.listdir(patterns_dir)
+	dirlist.sort()
+	for f in dirlist:
 		if not f.endswith('.yaml'):
 			continue
 		print "Merging %s to %s." % (f,output_file)
