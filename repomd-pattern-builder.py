@@ -93,7 +93,6 @@ def process_yaml(stream, version, release, proot, newobsapi):
 				key = "Requires"
 				print "WARNING: Oboleted key 'Packages' in .yaml please change to 'Requires'."
 			
-			print "Creating key %s" % (key)
 			req = etree.SubElement(proot, "{%s}%s" % (rpm_ns,key.lower()))
 
 			for p in collect:
