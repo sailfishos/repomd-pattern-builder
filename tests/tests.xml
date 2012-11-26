@@ -5,6 +5,7 @@
   <description> Tests to test repomd-pattern-builder</description>
   <case name="pattern-test1">
     <description>Test default pattern features</description>
+    <step>rm -rf /tmp/patternxml-test/ /tmp/groupxml-test/</step>
     <step>/usr/bin/repomd-pattern-builder.py --output /tmp/patternxml-test/ -p /opt/tests/repomd-pattern-builder/data/patterns/</step>
     <step>diff -ruN /tmp/patternxml-test/ /opt/tests/repomd-pattern-builder/data/output-valid/</step>
     <step>/usr/bin/repomd-pattern-builder.py --groupxml --output /tmp/groupxml-test/ -p /opt/tests/repomd-pattern-builder/data/patterns/</step>
