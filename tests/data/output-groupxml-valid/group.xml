@@ -32,7 +32,6 @@
     <uservisible/>
     <category lang="en">Base Group</category>
   </pattern>
-  <pattern xmlns:rpm="http://linux.duke.edu/metadata/rpm" xmlns:patterns="http://novell.com/package/metadata/suse/pattern" xmlns="http://novell.com/package/metadata/suse/pattern"/>
   <pattern xmlns:rpm="http://linux.duke.edu/metadata/rpm" xmlns:patterns="http://novell.com/package/metadata/suse/pattern" xmlns="http://novell.com/package/metadata/suse/pattern">
     <name>test4</name>
     <version ver="1" epoch="3" rel="2"/>

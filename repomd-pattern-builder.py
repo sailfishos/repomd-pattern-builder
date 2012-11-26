@@ -31,12 +31,15 @@ NSMAP = {None : pattern_ns, "rpm": rpm_ns}
 
 NSMAP_GROUP = {None : pattern_ns, "rpm": rpm_ns, "patterns": pattern_ns}
 
-def process_yaml(stream, version, release, proot, newobsapi):
+def process_yaml(stream, version, release, xmlroot, nsmap_name, newobsapi):
 	"Process all documents in the yaml stream and return a count of number handled"
+
 	all_docs = yaml.load_all(stream)
-	count = 0
+	
 	for y in all_docs:
-		count = count + 1
+		# <pattern>
+		proot = etree.SubElement(xmlroot, "pattern",  nsmap=nsmap_name)
+		
 		# <name>
 		etree.SubElement(proot, "name").text = y['Name']
 
@@ -102,8 +105,6 @@ def process_yaml(stream, version, release, proot, newobsapi):
 				entry = etree.SubElement(req, "{%s}entry" %rpm_ns)
 				entry.set("name", p)
 
-	return count
-
 def create_patterns(patterns_dir, version, release, outputdir, newobsapi):
 	dirlist = os.listdir(patterns_dir)
 	dirlist.sort()
@@ -116,28 +117,33 @@ def create_patterns(patterns_dir, version, release, outputdir, newobsapi):
 		print "Working on %s" % (output_file)
 		
 		stream = file("%s/%s" %(patterns_dir,f), 'r')
-		proot = etree.Element("pattern",  nsmap=NSMAP)
-		process_yaml(stream, version, release, proot, newobsapi)
+		xmlroot = etree.Element("temporary_root",  nsmap=NSMAP)
+		
+		process_yaml(stream, version, release, xmlroot, NSMAP, newobsapi)
 
-		# Indent the XML as we output to file.
-		etree.ElementTree(proot).write(output_file, pretty_print=True)
+		pattern = xmlroot.find("pattern")
+
+		if pattern is None:
+			continue
+
+		etree.ElementTree(pattern).write(output_file, pretty_print=True)
 
 def merge_patterns(patterns_dir, version, release, outputdir, newobsapi):
 	xmlroot = etree.Element("patterns")
 	output_file = "%s/group.xml" % (outputdir)
-	count = 0
 	dirlist = os.listdir(patterns_dir)
 	dirlist.sort()
+
 	for f in dirlist:
 		if not f.endswith('.yaml'):
 			continue
 		print "Merging %s to %s." % (f,output_file)
 		stream = file("%s/%s" %(patterns_dir,f), 'r')
-		proot = etree.SubElement(xmlroot, "pattern",  nsmap=NSMAP_GROUP)
-		count = count + process_yaml(stream, version, release, proot, newobsapi)
+		process_yaml(stream, version, release, xmlroot, NSMAP_GROUP, newobsapi)
 
-	xmlroot.set('count', "%d" %count)
-	# Indent the XML as we output to file.
+	patterns = xmlroot.findall("pattern")
+	xmlroot.set('count', "%d" % (len(patterns)))
+
 	etree.ElementTree(xmlroot).write(output_file, pretty_print=True)
 
 if __name__ == '__main__':
