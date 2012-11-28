@@ -2,7 +2,7 @@ Name: repomd-pattern-builder
 Summary: Scripts to build patterns for the rpm repository.
 Description: |
    Script that converts .yaml structures to suitable rpm patterns and package groups.
-Version: 0.2.1
+Version: 0.3
 Release: 1
 Group: Software Management/Package Manager
 License: GPLv2
@@ -16,4 +16,5 @@ Requires:
     - python-yaml
     - python-lxml
     - /usr/bin/xmllint
-
+AutoSubPackages:
+    - tests

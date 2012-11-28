@@ -9,7 +9,7 @@ Name:       repomd-pattern-builder
 # << macros
 
 Summary:    Scripts to build patterns for the rpm repository.
-Version:    0.2.1
+Version:    0.3
 Release:    1
 Group:      Software Management/Package Manager
 License:    GPLv2
@@ -24,6 +24,14 @@ Requires:   /usr/bin/xmllint
 %description
 Script that converts .yaml structures to suitable rpm patterns and package groups.
 
+
+%package tests
+Summary:    Files for %{name}
+Group:      Development/Libraries
+Requires:   %{name} = %{version}-%{release}
+
+%description tests
+Files for %{name}.
 
 
 %prep
@@ -44,7 +52,7 @@ Script that converts .yaml structures to suitable rpm patterns and package group
 %install
 rm -rf %{buildroot}
 # >> install pre
-install -D %{name}.py %{buildroot}/%{_bindir}/%{name}.py
+%make_install
 # << install pre
 
 # >> install post
@@ -56,3 +64,10 @@ install -D %{name}.py %{buildroot}/%{_bindir}/%{name}.py
 # >> files
 %{_bindir}/%{name}.py
 # << files
+
+%files tests
+%defattr(-,root,root,-)
+# >> files tests
+/opt/tests/repomd-pattern-builder/tests.xml
+/opt/tests/repomd-pattern-builder/data/*
+# << files tests
