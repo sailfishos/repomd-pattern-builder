@@ -1,0 +1,7 @@
+<pattern xmlns:rpm="http://linux.duke.edu/metadata/rpm" xmlns="http://novell.com/package/metadata/suse/pattern">
+  <name>test5.1</name>
+  <summary>Test5.1</summary>
+  <description>Test decription</description>
+  <uservisible/>
+  <category lang="en">Base Group</category>
+</pattern>

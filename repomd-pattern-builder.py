@@ -112,25 +112,25 @@ def create_patterns(patterns_dir, version, release, outputdir, newobsapi):
 		if not f.endswith('.yaml'):
 			continue
 		
-		output_file = "%s/%s.xml" % (outputdir,os.path.basename(f).split('.')[0])
-		
-		print "Working on %s" % (output_file)
-		
 		stream = file("%s/%s" %(patterns_dir,f), 'r')
 		xmlroot = etree.Element("temporary_root",  nsmap=NSMAP)
 		
 		process_yaml(stream, version, release, xmlroot, NSMAP, newobsapi)
 
-		pattern = xmlroot.find("pattern")
+		for pattern in xmlroot.findall("pattern"):
+			
+			name = pattern.find("name")
+			if name == None:
+				print "Pattern didn't have name skipping."
+				continue
+			output_file = "%s/%s.xml" % (outputdir,name.text.lower())
+			print "Working on %s" % (output_file)
 
-		if pattern is None:
-			continue
-
-		etree.ElementTree(pattern).write(output_file, pretty_print=True)
+			etree.ElementTree(pattern).write(output_file, pretty_print=True)
 
 def merge_patterns(patterns_dir, version, release, outputdir, newobsapi):
 	xmlroot = etree.Element("patterns")
-	output_file = "%s/group.xml" % (outputdir)
+	output_file = "%s/patterns.xml" % (outputdir)
 	dirlist = os.listdir(patterns_dir)
 	dirlist.sort()
 
@@ -152,9 +152,12 @@ if __name__ == '__main__':
 	parser.add_option("", "--patternxml", action="store_true", dest="patternxml",
 			default=False,
 			help="Create separated pattern XML file for each pattern.")
+	parser.add_option("", "--patternsxml", action="store_true", dest="patternsxml",
+			default=False,
+			help="Create merged patterns.xml from all the available patterns.")
 	parser.add_option("", "--groupxml", action="store_true", dest="groupxml",
 			default=False,
-			help="Create merged group.xml from all the available patterns.")
+			help="Create group.xml.")
 	parser.add_option("-p", "--patterndir", type="string", dest="patterndir",
 			default=None,
 			help="Directory where the pattern .yaml files are located.")
@@ -169,7 +172,11 @@ if __name__ == '__main__':
 	
 	(options, args) = parser.parse_args()
 	
-	if (not options.groupxml and not options.patternxml):
+	if (options.groupxml):
+		print "ERROR: Groupxml isn't supported atm."
+		exit(1)
+
+	if (not options.patternsxml and not options.patternxml):
 		# Default to patternxml.
 		options.patternxml = True
 	
@@ -183,5 +190,6 @@ if __name__ == '__main__':
 	if options.patternxml:
 		create_patterns(options.patterndir, options.version, options.release, options.outputdir, options.newobsapi)
 
-	if options.groupxml:
+	if options.patternsxml:
 		merge_patterns(options.patterndir, options.version, options.release, options.outputdir, options.newobsapi)
+
