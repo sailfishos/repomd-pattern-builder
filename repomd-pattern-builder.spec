@@ -26,12 +26,14 @@ Script that converts .yaml structures to suitable rpm patterns and package group
 
 
 %package tests
-Summary:    Files for %{name}
-Group:      Development/Libraries
+Summary:    tests for %{name}
+Group:      QA/Tests
 Requires:   %{name} = %{version}-%{release}
+Requires:   diffutils
 
 %description tests
-Files for %{name}.
+%{summary}.
+
 
 
 %prep

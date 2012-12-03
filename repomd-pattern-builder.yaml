@@ -16,5 +16,11 @@ Requires:
     - python-yaml
     - python-lxml
     - /usr/bin/xmllint
-AutoSubPackages:
-    - tests
+SubPackages:
+    - Name: tests
+      Summary: tests for %{name}
+      Description: |
+        %{summary}.
+      Group: QA/Tests
+      Requires:
+        - diffutils
