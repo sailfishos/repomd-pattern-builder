@@ -103,7 +103,17 @@ def process_yaml(stream, version, release, xmlroot, nsmap_name, newobsapi):
 					print "ERROR: Found dict and expected string value. '%s'" % (p)
 					sys.exit(1)
 				entry = etree.SubElement(req, "{%s}entry" %rpm_ns)
-				entry.set("name", p)
+
+				name = p
+				ver = None
+				for op in [">=", "<=", ">", "<", "="]:
+					if op in p:
+						name, ver = p.split(op)
+						break
+
+				entry.set("name", name.strip())
+				if ver:
+					entry.set("ver", "%s %s" % (op, ver.strip()))
 
 def create_patterns(patterns_dir, version, release, outputdir, newobsapi):
 	dirlist = os.listdir(patterns_dir)
