@@ -9,18 +9,18 @@
     <rpm:entry name="conflicts-test1"/>
   </rpm:conflicts>
   <rpm:requires>
-    <rpm:entry name="requires-test1" ver="= 1"/>
-    <rpm:entry name="requires-test2" ver="&gt; 2"/>
-    <rpm:entry name="requires-test3" ver="&lt; 3"/>
+    <rpm:entry name="requires-test1" flags="EQ" ver="1"/>
+    <rpm:entry name="requires-test2" flags="GT" ver="2"/>
+    <rpm:entry name="requires-test3" flags="LT" ver="3"/>
   </rpm:requires>
   <rpm:recommends>
-    <rpm:entry name="recommends-test1" ver="&gt;= 1"/>
+    <rpm:entry name="recommends-test1" flags="GE" ver="1"/>
   </rpm:recommends>
   <rpm:suggests>
     <rpm:entry name="suggests-test1"/>
   </rpm:suggests>
   <rpm:provides>
-    <rpm:entry name="provides-test1" ver="&lt;= 1"/>
+    <rpm:entry name="provides-test1" flags="LE" ver="1"/>
     <rpm:entry name="provides-test2"/>
   </rpm:provides>
 </pattern>
