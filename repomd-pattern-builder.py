@@ -85,7 +85,7 @@ def process_yaml(stream, version, release, xmlroot, nsmap_name, newobsapi):
 		cat.text = "Base Group"
 		cat.set("lang", "en")
 
-		package_keys = ['Packages','Conflicts', 'Requires', 'Recommends', 'Suggests', 'Provides']
+		package_keys = ['Packages','Conflicts', 'Requires', 'Recommends', 'Suggests', 'Provides', 'Obsoletes']
 		for key in package_keys:
 			if not y.has_key(key):
 				continue

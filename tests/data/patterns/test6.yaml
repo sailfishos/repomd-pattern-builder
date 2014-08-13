@@ -1,0 +1,18 @@
+Description: Test decription
+Name: test6
+Version: 1
+Release: 2
+Conflicts:
+- conflicts-test1
+Requires:
+- requires-test1 = 1
+- requires-test2 > 2
+- requires-test3 < 3
+Recommends:
+- recommends-test1 >= 1
+Provides:
+- provides-test1 <= 1
+- provides-test2
+Suggests:
+- suggests-test1
+Summary: Test6
