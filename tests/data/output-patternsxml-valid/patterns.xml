@@ -89,7 +89,7 @@
       <rpm:entry name="conflicts-test1"/>
     </rpm:conflicts>
     <rpm:requires>
-      <rpm:entry name="requires-test1" flags="EQ" ver="=1"/>
+      <rpm:entry name="requires-test1" flags="EQ" ver="1"/>
       <rpm:entry name="requires-test2" flags="GT" ver="2"/>
       <rpm:entry name="requires-test3" flags="LT" ver="3"/>
     </rpm:requires>
@@ -100,7 +100,7 @@
       <rpm:entry name="suggests-test1"/>
     </rpm:suggests>
     <rpm:provides>
-      <rpm:entry name="provides-test1" flags="LT" ver="1"/>
+      <rpm:entry name="provides-test1" flags="LE" ver="1"/>
       <rpm:entry name="provides-test2"/>
     </rpm:provides>
   </pattern>
