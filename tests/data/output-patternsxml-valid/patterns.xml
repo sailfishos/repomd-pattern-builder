@@ -1,5 +1,5 @@
 <patterns count="6">
-  <pattern xmlns:patterns="http://novell.com/package/metadata/suse/pattern" xmlns:rpm="http://linux.duke.edu/metadata/rpm" xmlns="http://novell.com/package/metadata/suse/pattern">
+  <pattern xmlns:rpm="http://linux.duke.edu/metadata/rpm" xmlns:patterns="http://novell.com/package/metadata/suse/pattern" xmlns="http://novell.com/package/metadata/suse/pattern">
     <name>test1</name>
     <version ver="1" epoch="0" rel="2"/>
     <summary>Test1</summary>
@@ -25,14 +25,14 @@
       <rpm:entry name="provides-test2"/>
     </rpm:provides>
   </pattern>
-  <pattern xmlns:patterns="http://novell.com/package/metadata/suse/pattern" xmlns:rpm="http://linux.duke.edu/metadata/rpm" xmlns="http://novell.com/package/metadata/suse/pattern">
+  <pattern xmlns:rpm="http://linux.duke.edu/metadata/rpm" xmlns:patterns="http://novell.com/package/metadata/suse/pattern" xmlns="http://novell.com/package/metadata/suse/pattern">
     <name>test2</name>
     <summary>Test2</summary>
     <description>Test decription</description>
     <uservisible/>
     <category lang="en">Base Group</category>
   </pattern>
-  <pattern xmlns:patterns="http://novell.com/package/metadata/suse/pattern" xmlns:rpm="http://linux.duke.edu/metadata/rpm" xmlns="http://novell.com/package/metadata/suse/pattern">
+  <pattern xmlns:rpm="http://linux.duke.edu/metadata/rpm" xmlns:patterns="http://novell.com/package/metadata/suse/pattern" xmlns="http://novell.com/package/metadata/suse/pattern">
     <name>test4</name>
     <version ver="1" epoch="3" rel="2"/>
     <arch>i686</arch>
@@ -45,7 +45,7 @@
       <rpm:entry name="bar foo"/>
     </rpm:requires>
   </pattern>
-  <pattern xmlns:patterns="http://novell.com/package/metadata/suse/pattern" xmlns:rpm="http://linux.duke.edu/metadata/rpm" xmlns="http://novell.com/package/metadata/suse/pattern">
+  <pattern xmlns:rpm="http://linux.duke.edu/metadata/rpm" xmlns:patterns="http://novell.com/package/metadata/suse/pattern" xmlns="http://novell.com/package/metadata/suse/pattern">
     <name>test5</name>
     <version ver="1" epoch="0" rel="2"/>
     <summary>Test5</summary>
@@ -71,14 +71,14 @@
       <rpm:entry name="provides-test2"/>
     </rpm:provides>
   </pattern>
-  <pattern xmlns:patterns="http://novell.com/package/metadata/suse/pattern" xmlns:rpm="http://linux.duke.edu/metadata/rpm" xmlns="http://novell.com/package/metadata/suse/pattern">
+  <pattern xmlns:rpm="http://linux.duke.edu/metadata/rpm" xmlns:patterns="http://novell.com/package/metadata/suse/pattern" xmlns="http://novell.com/package/metadata/suse/pattern">
     <name>test5.1</name>
     <summary>Test5.1</summary>
     <description>Test decription</description>
     <uservisible/>
     <category lang="en">Base Group</category>
   </pattern>
-  <pattern xmlns:patterns="http://novell.com/package/metadata/suse/pattern" xmlns:rpm="http://linux.duke.edu/metadata/rpm" xmlns="http://novell.com/package/metadata/suse/pattern">
+  <pattern xmlns:rpm="http://linux.duke.edu/metadata/rpm" xmlns:patterns="http://novell.com/package/metadata/suse/pattern" xmlns="http://novell.com/package/metadata/suse/pattern">
     <name>test6</name>
     <version ver="1" epoch="0" rel="2"/>
     <summary>Test6</summary>
