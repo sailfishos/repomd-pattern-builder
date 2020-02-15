@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # This script is used to convert .yaml files to patterns and package groups.
 # Copyright (C) 2011 Marko Saukko <FIRSTNAME.LASTNAME@gmail.com>
@@ -34,7 +34,7 @@ NSMAP_GROUP = {None : pattern_ns, "rpm": rpm_ns, "patterns": pattern_ns}
 def process_yaml(stream, version, release, xmlroot, nsmap_name, newobsapi):
 	"Process all documents in the yaml stream and return a count of number handled"
 
-	all_docs = yaml.load_all(stream)
+	all_docs = yaml.load_all(stream, Loader = yaml.SafeLoader)
 	
 	for y in all_docs:
 		# <pattern>
@@ -46,7 +46,7 @@ def process_yaml(stream, version, release, xmlroot, nsmap_name, newobsapi):
 		# Old OBS isn't able to handle these options.
 		if newobsapi:
 			# <version>
-			if y.has_key('Version') or version:
+			if 'Version' in y or version:
 				entry = etree.SubElement(proot, "version")
 				ver = "0"
 				if version:
@@ -56,14 +56,14 @@ def process_yaml(stream, version, release, xmlroot, nsmap_name, newobsapi):
 
 				# Set to 0 by default as that is what OBS expects.
 				epoch = "0"
-				if y.has_key('Epoch'):
+				if 'Epoch' in y:
 					epoch = y['Epoch']
 
 				# As above...
 				rel = "0"
 				if release:
 					rel = release
-				if y.has_key('Release'):
+				if 'Release' in y:
 					rel =  y['Release']
 
 				entry.set('ver', "%s" % ver)
@@ -71,7 +71,7 @@ def process_yaml(stream, version, release, xmlroot, nsmap_name, newobsapi):
 				entry.set('rel', "%s" % rel)
 
 			# <arch>
-			if y.has_key('Arch'):
+			if 'Arch' in y:
 				etree.SubElement(proot, "arch").text = "%s" % y['Arch']
 
 		# <summary>
@@ -87,20 +87,20 @@ def process_yaml(stream, version, release, xmlroot, nsmap_name, newobsapi):
 
 		package_keys = ['Packages','Conflicts', 'Requires', 'Recommends', 'Suggests', 'Provides', 'Obsoletes']
 		for key in package_keys:
-			if not y.has_key(key):
+			if key not in y:
 				continue
 
 			collect = y[key]
 			if key == "Packages":
 				# Support obsoleted keys, this should be removed in the future
 				key = "Requires"
-				print "WARNING: Oboleted key 'Packages' in .yaml please change to 'Requires'."
+				print ("WARNING: Oboleted key 'Packages' in .yaml please change to 'Requires'.")
 			
 			req = etree.SubElement(proot, "{%s}%s" % (rpm_ns,key.lower()))
 
 			for p in collect:
 				if type(p).__name__=='dict':
-					print "ERROR: Found dict and expected string value. '%s'" % (p)
+					print ("ERROR: Found dict and expected string value. '%s'" % (p))
 					sys.exit(1)
 				entry = etree.SubElement(req, "{%s}entry" %rpm_ns)
 
@@ -127,7 +127,7 @@ def create_patterns(patterns_dir, version, release, outputdir, newobsapi):
 		if not f.endswith('.yaml'):
 			continue
 		
-		stream = file("%s/%s" %(patterns_dir,f), 'r')
+		stream = open("%s/%s" %(patterns_dir,f), 'r')
 		xmlroot = etree.Element("temporary_root",  nsmap=NSMAP)
 		
 		process_yaml(stream, version, release, xmlroot, NSMAP, newobsapi)
@@ -136,10 +136,10 @@ def create_patterns(patterns_dir, version, release, outputdir, newobsapi):
 			
 			name = pattern.find("name")
 			if name == None:
-				print "Pattern didn't have name skipping."
+				print ("Pattern didn't have name skipping.")
 				continue
 			output_file = "%s/%s.xml" % (outputdir,name.text.lower())
-			print "Working on %s" % (output_file)
+			print ("Working on %s" % (output_file))
 
 			etree.ElementTree(pattern).write(output_file, pretty_print=True)
 
@@ -152,7 +152,7 @@ def merge_patterns(patterns_dir, version, release, outputdir, newobsapi):
 	for f in dirlist:
 		if not f.endswith('.yaml'):
 			continue
-		print "Merging %s to %s." % (f,output_file)
+		print ("Merging %s to %s." % (f,output_file))
 		stream = file("%s/%s" %(patterns_dir,f), 'r')
 		process_yaml(stream, version, release, xmlroot, NSMAP_GROUP, newobsapi)
 
@@ -188,7 +188,7 @@ if __name__ == '__main__':
 	(options, args) = parser.parse_args()
 	
 	if (options.groupxml):
-		print "ERROR: Groupxml isn't supported atm."
+		print ("ERROR: Groupxml isn't supported atm.")
 		exit(1)
 
 	if (not options.patternsxml and not options.patternxml):
@@ -196,7 +196,7 @@ if __name__ == '__main__':
 		options.patternxml = True
 	
 	if (not options.patterndir or not os.path.exists(options.patterndir)):
-		print "Error: Pattern dir '%s' doesn't exist." % (options.patterndir)
+		print ("Error: Pattern dir '%s' doesn't exist." % (options.patterndir))
 		exit(1)
 	
 	if options.outputdir and not os.path.exists(options.outputdir):
